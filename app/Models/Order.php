@@ -12,6 +12,13 @@ class Order extends Model
     public function productos(){
             
         return $this->belongsToMany('\App\Models\Product', 'orders_lines')->withPivot('qty');
+    }
+
+    public function costeSum(){
         
+        return $this->belongsToMany('\App\Models\Product', 'orders_lines')
+        ->selectRaw('sum(orders_lines.qty * products.cost) as pivot_count')
+        //->withTimestamps()
+        ->groupBy('pivot_product_id','pivot_order_id');
     }
 }
